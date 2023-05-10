@@ -54,6 +54,8 @@ public class IniciarVotacao extends javax.swing.JFrame {
                 .addGap(31, 31, 31))
         );
 
+        getAccessibleContext().setAccessibleName("Votação");
+
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
