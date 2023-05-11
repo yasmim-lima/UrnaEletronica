@@ -5,6 +5,15 @@
 package interfaces;
 
 import arquivos.GerenteArquivos;
+import java.awt.Image;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.IOException;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 /**
@@ -12,6 +21,10 @@ import javax.swing.JOptionPane;
  * @author Yasmim
  */
 public class Cadastrar extends javax.swing.JFrame {
+
+    private String caminhoImagem;
+    private String extensaoImagem;
+    private int qtdCandidato;
 
     /**
      * Creates new form Cadastrar
@@ -38,22 +51,25 @@ public class Cadastrar extends javax.swing.JFrame {
         tfdNumero = new javax.swing.JTextField();
         btnCadastrar = new javax.swing.JButton();
         btnFC = new javax.swing.JButton();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jLabel1 = new javax.swing.JLabel();
+        lTitulo = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        lImagem = new javax.swing.JLabel();
+        btnResetarCadastro = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastrar Candidatos");
         setBackground(new java.awt.Color(255, 102, 51));
 
         jPanel1.setBackground(new java.awt.Color(255, 102, 51));
+        jPanel1.setPreferredSize(new java.awt.Dimension(720, 720));
 
-        lNome.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
-        lNome.setText("Nome:");
+        lNome.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
+        lNome.setText("Sabor da Pizza:");
 
-        lFoto.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        lFoto.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
         lFoto.setText("Foto:");
 
-        lNumero.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        lNumero.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
         lNumero.setText("Número:");
 
         tfdNome.addActionListener(new java.awt.event.ActionListener() {
@@ -62,7 +78,10 @@ public class Cadastrar extends javax.swing.JFrame {
             }
         });
 
+        btnInserirFoto.setFont(new java.awt.Font("Segoe UI Black", 1, 12)); // NOI18N
         btnInserirFoto.setText("Inserir Foto");
+        btnInserirFoto.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnInserirFoto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnInserirFoto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnInserirFotoActionPerformed(evt);
@@ -75,99 +94,133 @@ public class Cadastrar extends javax.swing.JFrame {
             }
         });
 
+        btnCadastrar.setFont(new java.awt.Font("Segoe UI Black", 1, 12)); // NOI18N
         btnCadastrar.setText("Cadastrar");
+        btnCadastrar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnCadastrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCadastrarActionPerformed(evt);
             }
         });
 
+        btnFC.setFont(new java.awt.Font("Segoe UI Black", 1, 12)); // NOI18N
         btnFC.setText("Finalizar Cadastro");
+        btnFC.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnFC.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnFC.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFCActionPerformed(evt);
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Cadastro de Candidatos");
+        lTitulo.setFont(new java.awt.Font("Segoe UI Symbol", 3, 36)); // NOI18N
+        lTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lTitulo.setText("Cadastro de Candidatos");
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        lImagem.setForeground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lImagem, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lImagem, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+        );
+
+        btnResetarCadastro.setText("Resetar Cadastro");
+        btnResetarCadastro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetarCadastroActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(52, 52, 52)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lNome)
+                    .addComponent(lFoto)
+                    .addComponent(lNumero))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lNumero)
-                            .addComponent(lNome)
-                            .addComponent(lFoto))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfdNome, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnInserirFoto)
-                                    .addComponent(tfdNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(71, 71, 71)
-                                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(83, 83, 83)
-                        .addComponent(btnCadastrar)))
-                .addContainerGap(64, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addContainerGap(260, Short.MAX_VALUE)
-                    .addComponent(btnFC)
-                    .addGap(79, 79, 79)))
+                                .addComponent(tfdNumero, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
+                                .addGap(94, 94, 94))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnInserirFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(4, 4, 4))
+                    .addComponent(tfdNome))
+                .addGap(48, 48, 48))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(89, 89, 89)
+                .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnResetarCadastro)
+                        .addGap(126, 126, 126)
+                        .addComponent(btnFC, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(22, 22, 22))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(lTitulo)
+                        .addGap(126, 126, 126))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(jLabel1)
-                .addGap(47, 47, 47)
+                .addGap(24, 24, 24)
+                .addComponent(lTitulo)
+                .addGap(51, 51, 51)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lNome)
                     .addComponent(tfdNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
+                .addGap(23, 23, 23)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lNumero)
                             .addComponent(tfdNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(26, 26, 26)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGap(72, 72, 72)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lFoto)
-                            .addComponent(btnInserirFoto)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
-                .addComponent(btnCadastrar)
-                .addGap(42, 42, 42))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addContainerGap(208, Short.MAX_VALUE)
-                    .addComponent(btnFC)
-                    .addGap(40, 40, 40)))
+                            .addComponent(btnInserirFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnFC, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnResetarCadastro, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(15, 15, 15))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
         );
 
         jPanel1.getAccessibleContext().setAccessibleName("Cadastrar Candidato");
@@ -182,7 +235,19 @@ public class Cadastrar extends javax.swing.JFrame {
     }//GEN-LAST:event_tfdNomeActionPerformed
 
     private void btnInserirFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirFotoActionPerformed
-        // TODO add your handling code here:
+        JFileChooser arqImage = new JFileChooser(); //Cria um objeto que permite escolher a imagem
+        arqImage.setDialogTitle("Selecione uma Imagem"); //Modifica o nome da tela de dialogo que ira abrir
+        arqImage.setFileSelectionMode(JFileChooser.FILES_ONLY); //Permite escolher apenas um arquivo por vez
+        int op = arqImage.showOpenDialog(this);
+        if (op == JFileChooser.APPROVE_OPTION) { //Verifica se usuario escolheu foto
+            File file = new File("");
+            file = arqImage.getSelectedFile();
+            String fileName = file.getAbsolutePath();
+            this.caminhoImagem = fileName;
+            this.extensaoImagem = file.getName().substring(file.getName().lastIndexOf("."));
+            ImageIcon imagem = new ImageIcon(file.getPath());
+            lImagem.setIcon(new ImageIcon(imagem.getImage().getScaledInstance(lImagem.getWidth(), lImagem.getHeight(), Image.SCALE_DEFAULT)));
+        }
     }//GEN-LAST:event_btnInserirFotoActionPerformed
 
     private void tfdNumeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfdNumeroActionPerformed
@@ -190,22 +255,63 @@ public class Cadastrar extends javax.swing.JFrame {
     }//GEN-LAST:event_tfdNumeroActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
+        
+        if (this.qtdCandidato >= 4){
+                JOptionPane.showMessageDialog(null, "Já existem 4 candidatos cadastrados.");
+                new TelaPrincipal().setVisible(true);
+                setVisible(false);
+            }
+        System.out.println("Quantidade de Candidatos: " + qtdCandidato);
+        File pastaDestino = new File("imgs");
+        
+        try {
+            InputStream is = new FileInputStream(this.caminhoImagem);
+            OutputStream os = new FileOutputStream(new File(pastaDestino, tfdNumero.getText() + this.extensaoImagem));
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = is.read(buffer)) > 0) {
+                os.write(buffer, 0, length);
+            }
+            is.close();
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         GerenteArquivos gerente = new GerenteArquivos();
-        if(gerente.cadastrarCandidatos(tfdNumero.getText(), tfdNome.getText())){
-            JOptionPane.showMessageDialog(null,"Candidato Cadastrado com sucesso.");
-            tfdNome.setText("");
-            tfdNumero.setText("");
-            tfdNome.requestFocus();
-        } else{
-            JOptionPane.showMessageDialog(null,"Erro ao Cadastrar Candidato.");
+        boolean cadastrou = gerente.cadastrarCandidatos(tfdNumero.getText(), tfdNome.getText());
+        if (cadastrou) {
+            JOptionPane.showMessageDialog(null, "Candidato Cadastrado com sucesso.");
+            tfdNome.setText("");//Limpa campo do nome
+            tfdNumero.setText(""); //Limpa campo do numero
+            lImagem.setIcon(null); //Limpa campo de imagem
+            tfdNome.requestFocus(); //Já coloca o cursor no nome
+            this.qtdCandidato += 1;
+            if (this.qtdCandidato == 4){
+                JOptionPane.showMessageDialog(null, "Os 4 candidatos foram cadastrados.");
+                new TelaPrincipal().setVisible(true);
+                setVisible(false);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Erro ao Cadastrar Candidato.");
         }
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnFCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFCActionPerformed
         new TelaPrincipal().setVisible(true);
-//        IniciarVotacao votar = new IniciarVotacao();
         setVisible(false);
     }//GEN-LAST:event_btnFCActionPerformed
+
+    private void btnResetarCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetarCadastroActionPerformed
+
+        GerenteArquivos gerente = new GerenteArquivos();
+        if(gerente.resetarCadastro()){
+            this.qtdCandidato = 0;
+            JOptionPane.showMessageDialog(null, "Cadastro Resetado com Sucesso");
+        } else {
+            JOptionPane.showMessageDialog(null, "Falha no Reset do Cadastro");
+        }
+    }//GEN-LAST:event_btnResetarCadastroActionPerformed
 
     /**
      * @param args the command line arguments
@@ -246,12 +352,14 @@ public class Cadastrar extends javax.swing.JFrame {
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnFC;
     private javax.swing.JButton btnInserirFoto;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton btnResetarCadastro;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lFoto;
+    private javax.swing.JLabel lImagem;
     private javax.swing.JLabel lNome;
     private javax.swing.JLabel lNumero;
+    private javax.swing.JLabel lTitulo;
     private javax.swing.JTextField tfdNome;
     private javax.swing.JTextField tfdNumero;
     // End of variables declaration//GEN-END:variables
