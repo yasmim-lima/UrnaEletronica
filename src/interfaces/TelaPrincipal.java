@@ -37,6 +37,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         setBackground(new java.awt.Color(255, 102, 51));
 
         jPanel1.setBackground(new java.awt.Color(255, 102, 51));
+        jPanel1.setName("Tela Principal"); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("Bem vindo(a) a eleição do melhor sabor de pizza!");
@@ -101,8 +102,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
+
+        jPanel1.getAccessibleContext().setAccessibleName("Tela Principal");
+
+        getAccessibleContext().setAccessibleName("Tela Principal");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

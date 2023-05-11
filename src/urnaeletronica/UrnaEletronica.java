@@ -4,6 +4,8 @@
  */
 package urnaeletronica;
 
+import arquivos.*;
+import interfaces.*;
 /**
  *
  * @author Yasmim
@@ -14,7 +16,8 @@ public class UrnaEletronica {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        TelaPrincipal principal = new TelaPrincipal();
+        principal.setVisible(true);
     }
     
 }
