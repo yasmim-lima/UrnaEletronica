@@ -29,6 +29,7 @@ public class IniciarVotacao extends javax.swing.JFrame {
         button1 = new java.awt.Button();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Votação");
 
         button1.setLabel("Votar");
         button1.addActionListener(new java.awt.event.ActionListener() {
