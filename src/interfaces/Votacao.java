@@ -4,14 +4,22 @@
  */
 package interfaces;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Yasmim
  */
-class listModel {
-
-    static void addElement(String pizzas) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+public class Votacao {
+    
+    ArrayList<Voto> votos = new ArrayList();
+    
+    public void receberVoto(Voto voto){
+        votos.add(voto);
+    }
+    
+    public String numeroVotos(){
+        return votos.size() + "";
     }
     
 }
