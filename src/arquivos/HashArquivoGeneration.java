@@ -29,13 +29,13 @@ public class HashArquivoGeneration {
 		    return hexString.toString();
 		  }
 
-		  public static void main(String[] args) {
-		    try {
-		      File file = new File("arqs\\Writer.txt");
-		      String hash = generateHash(file);
-		      System.out.println("Hash SHA256 do arquivo: " + hash);
-		    } catch (NoSuchAlgorithmException | IOException e) {
-		      System.err.println("Erro ao gerar hash: " + e.getMessage());
-		    }
-		  }
+//		  public static void main(String[] args) {
+//		    try {
+//		      File file = new File("arqs\\Writer.txt");
+//		      String hash = generateHash(file);
+//		      System.out.println("Hash SHA256 do arquivo: " + hash);
+//		    } catch (NoSuchAlgorithmException | IOException e) {
+//		      System.err.println("Erro ao gerar hash: " + e.getMessage());
+//		    }
+//		  }
 }

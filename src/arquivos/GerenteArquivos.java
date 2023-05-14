@@ -29,43 +29,41 @@ public class GerenteArquivos implements Arquivos {
 
     @Override
     public boolean cadastrarCandidatos(String nome, String numero, String caminhoImagem, String extensaoImagem) {
-
+        //Gera o nome do arquivo dos candidatos
         String nomeArquivo = "arqs"
                 + System.getProperty("file.separator")
                 + "Candidatos.txt";
-        File arquivo = new File(nomeArquivo);
-        
-        if (arquivo.exists()) {
-            try{
-                Scanner ler = new Scanner(arquivo);
-                while (ler.hasNextLine()){
-                    String linha = ler.nextLine();
-                    String[] partes = linha.split(",");
-                    
-                    String numeroLido = partes[0];
-                    String nomeLido = partes[1];
-                    Candidato candidatoLido = new Candidato(nomeLido, numeroLido);
-                    candidatosLidos.add(candidatoLido);
-                    System.out.println("Lendo arquivo pronto");
-                    candidatosLidos.stream().forEach(c -> System.out.println("Nome: " + c.getNome() + " | Número: " + c.getNumero()));
+        File arquivo = new File(nomeArquivo); //Cria um objeto arquivo
+        if (arquivo.exists()) { //Verifica se já existe o arquivo de candidatos
+            try {
+                Scanner ler = new Scanner(arquivo); //Cria objeto scanner
+                while (ler.hasNextLine()) { //Cria um loop para ler todas as linhas do arquivo Candidatos.txt
+                    String linha = ler.nextLine(); //String que recebe a linha lida
+                    String[] partes = linha.split(","); //Array de String que recebe as partes informações das linhas separadas por ,
+
+                    String numeroLido = partes[0]; //Atribui o nome lido a variavel nomeLido
+                    String nomeLido = partes[1]; //Atribui o numero lido a variavel numeroLido
+                    Candidato candidatoLido = new Candidato(nomeLido, numeroLido); //recria o candidato para adicionar na Array de candidatosLidos
+                    candidatosLidos.add(candidatoLido); //Adiciona o candidato a Array candidatosLidos
+//                    System.out.println("Lendo arquivo pronto"); //Avisa que leu o arquivo
+//                    candidatosLidos.stream().forEach(c -> System.out.println("Nome: " + c.getNome() + " | Número: " + c.getNumero())); //Imprime os candidadtos que estão presentes na Array candidatosLidos
                 }
                 ler.close();
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(GerenteArquivos.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
-        System.out.println("Quantidade de candidatos lidos eh: " + candidatosLidos.size());   
-        
+
+//        System.out.println("Quantidade de candidatos lidos eh: " + candidatosLidos.size()); Mostra o numero de candidatos que tem no arquivo canditos se já existir 
         Candidato candidato = new Candidato(nome, numero);
-        if ((candidatos.size() <= 3) && candidatosLidos.size() <=3) {
+        if ((candidatos.size() <= 3) && candidatosLidos.size() <= 3) { //Verifica se já tem 4 candidato cadastrados pra não adicionar mais
             candidatos.add(candidato);
             System.out.println("Candidato Cadastrado com Sucesso!");
-//            System.out.println("A quantidade de candidatos eh: " + candidatos.size());
-            candidatos.stream().forEach(c -> System.out.println("Nome: " + c.getNome() + " | Número: " + c.getNumero()));
+//            System.out.println("A quantidade de candidatos eh: " + candidatos.size()); //Mostra o tamanho da Array candidato
+            candidatos.stream().forEach(c -> System.out.println("Nome: " + c.getNome() + " | Número: " + c.getNumero())); //Mostra os candidatos que estão no Array candidatos
 
+            //Bloco que copia a imagem da pasta do computador da pessoa para a pasta de imagens do projeto
             File pastaDestino = new File("imgs");
-
             try {
                 InputStream is = new FileInputStream(caminhoImagem);
                 OutputStream os = new FileOutputStream(new File(pastaDestino, numero + extensaoImagem));
@@ -88,18 +86,21 @@ public class GerenteArquivos implements Arquivos {
                 registrarCandidatos();
             } catch (IOException ex) {
                 Logger.getLogger(GerenteArquivos.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(GerenteArquivos.class.getName()).log(Level.SEVERE, null, ex);
             }
             return false;
         }
-        
+
     }
 
-    public void registrarCandidatos() throws IOException {
-        String nomeArquivo = "arqs"
+    public void registrarCandidatos() throws IOException, NoSuchAlgorithmException {
+        //Essa função faz o registro de fato dos candidatos na Array candidatos parao arquivo Candidatos.txt
+        String nomeArquivoCandidato = "arqs"
                 + System.getProperty("file.separator")
                 + "Candidatos.txt";
 
-        File arquivo = new File(nomeArquivo);
+        File arquivo = new File(nomeArquivoCandidato);
         HashStringGeneration hashG = new HashStringGeneration(); //Cria um objeto do Gerador de Hash de String
 
         for (Candidato c : candidatos) {
@@ -109,7 +110,7 @@ public class GerenteArquivos implements Arquivos {
 
             try {
                 String hash = hashG.generateHash(texto); //Cria uma string pra receber o valor da hash
-                FileWriter escritor = new FileWriter(nomeArquivo, true); //Cria um objeto FileWriter
+                FileWriter escritor = new FileWriter(nomeArquivoCandidato, true); //Cria um objeto FileWriter
                 escritor.write(texto + hash + "\n"); //Faz a escrita no arquivo
                 escritor.close(); //Fecha a stream do escritor
 
@@ -118,7 +119,24 @@ public class GerenteArquivos implements Arquivos {
                 System.err.println("Erro ao gerar hash: " + e.getMessage());
             }
         }
+        //Bloco que criar o arquivo de Arquivos e adiciona a hash para o arquivo Candidatos.txt
+        String nomeArquivoArquivos = "arqs"
+                + System.getProperty("file.separator")
+                + "Arquivos.txt";
+        File fileArquivos = new File(nomeArquivoArquivos); //cria o objeto tipo File para o arquivo Arquivos.txt
+        if (!fileArquivos.exists()) { //Verifica se o arquivo Arquivos.txt existe ou não
 
+            HashArquivoGeneration hashGA = new HashArquivoGeneration(); //Cria um objeto do Gerador de Hash para Arquivo
+
+            try {
+                String hashArqCandidatos = hashGA.generateHash(arquivo); //String que recebe a hash gerada para o arquivo de Arquivos
+                FileWriter escritor = new FileWriter(nomeArquivoArquivos, true); //Cria um objeto FileWriter
+                escritor.write("Candidatos" + "," + hashArqCandidatos + "\n"); //Faz a escrita no arquivo
+                escritor.close();//Fecha a stream do escritor
+            } catch (NoSuchAlgorithmException e) {
+                System.err.println("Erro ao gerar hash: " + e.getMessage());
+            }
+        }
     }
 
     @Override

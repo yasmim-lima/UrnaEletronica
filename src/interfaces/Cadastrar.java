@@ -12,6 +12,7 @@ import java.awt.Image;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -274,6 +275,8 @@ public class Cadastrar extends javax.swing.JFrame {
         try {
             gerente.registrarCandidatos();
         } catch (IOException ex) {
+            Logger.getLogger(Cadastrar.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(Cadastrar.class.getName()).log(Level.SEVERE, null, ex);
         }
         new TelaPrincipal().setVisible(true);
