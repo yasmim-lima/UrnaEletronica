@@ -34,6 +34,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Tela Principal");
         setBackground(new java.awt.Color(255, 102, 51));
 
         jPanel1.setBackground(new java.awt.Color(255, 102, 51));
@@ -43,6 +44,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jLabel1.setText("Bem vindo(a) a eleição do melhor sabor de pizza!");
 
         jButton3.setText("Resultado");
+        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -50,6 +52,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         });
 
         jButton2.setText("Cadastrar Pizza");
+        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -57,6 +60,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         });
 
         jButton1.setText("Iniciar Votação");
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -106,8 +110,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         );
 
         jPanel1.getAccessibleContext().setAccessibleName("Tela Principal");
-
-        getAccessibleContext().setAccessibleName("Tela Principal");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

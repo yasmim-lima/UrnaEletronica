@@ -5,18 +5,28 @@
 package interfaces;
 
 import arquivos.GerenteArquivos;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.awt.Image;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+
+//#### Importes antigos
+//import arquivos.GerenteArquivosAntigo;
+//import java.io.BufferedReader;
+
+//import java.io.FileReader;
+//import java.io.InputStream;
+//import java.io.OutputStream;
+//import java.io.IOException;
+
 
 /**
  *
@@ -26,8 +36,9 @@ public class Cadastrar extends javax.swing.JFrame {
 
     private String caminhoImagem;
     private String extensaoImagem;
-    private int qtdCandidato;
-
+    
+    GerenteArquivos gerente = new GerenteArquivos();
+    
     /**
      * Creates new form Cadastrar
      */
@@ -56,9 +67,8 @@ public class Cadastrar extends javax.swing.JFrame {
         lTitulo = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         lImagem = new javax.swing.JLabel();
-        btnResetarCadastro = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Cadastrar Candidatos");
         setBackground(new java.awt.Color(255, 102, 51));
 
@@ -135,13 +145,6 @@ public class Cadastrar extends javax.swing.JFrame {
             .addComponent(lImagem, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
         );
 
-        btnResetarCadastro.setText("Resetar Cadastro");
-        btnResetarCadastro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnResetarCadastroActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -157,7 +160,7 @@ public class Cadastrar extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(tfdNumero, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
+                                .addComponent(tfdNumero, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
                                 .addGap(94, 94, 94))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(btnInserirFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -167,9 +170,7 @@ public class Cadastrar extends javax.swing.JFrame {
                     .addComponent(tfdNome))
                 .addGap(48, 48, 48))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(207, Short.MAX_VALUE)
-                .addComponent(btnResetarCadastro)
-                .addGap(126, 126, 126)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnFC, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(22, 22, 22))
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -202,13 +203,10 @@ public class Cadastrar extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lFoto)
                             .addComponent(btnInserirFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnFC, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnResetarCadastro, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnFC, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(15, 15, 15))
         );
 
@@ -257,63 +255,30 @@ public class Cadastrar extends javax.swing.JFrame {
     }//GEN-LAST:event_tfdNumeroActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        
-        if (this.qtdCandidato >= 4){
-                JOptionPane.showMessageDialog(null, "Já existem 4 candidatos cadastrados.");
-                new TelaPrincipal().setVisible(true);
-                setVisible(false);
-            }
-        System.out.println("Quantidade de Candidatos: " + qtdCandidato);
-        File pastaDestino = new File("imgs");
-        
-        try {
-            InputStream is = new FileInputStream(this.caminhoImagem);
-            OutputStream os = new FileOutputStream(new File(pastaDestino, tfdNumero.getText() + this.extensaoImagem));
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = is.read(buffer)) > 0) {
-                os.write(buffer, 0, length);
-            }
-            is.close();
-            os.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        GerenteArquivos gerente = new GerenteArquivos();
-        boolean cadastrou = gerente.cadastrarCandidatos(tfdNumero.getText(), tfdNome.getText());
-        if (cadastrou) {
-            JOptionPane.showMessageDialog(null, "Candidato Cadastrado com sucesso.");
-            tfdNome.setText("");//Limpa campo do nome
-            tfdNumero.setText(""); //Limpa campo do numero
-            lImagem.setIcon(null); //Limpa campo de imagem
-            tfdNome.requestFocus(); //Já coloca o cursor no nome
-            this.qtdCandidato += 1;
-            if (this.qtdCandidato == 4){
-                JOptionPane.showMessageDialog(null, "Os 4 candidatos foram cadastrados.");
-                new TelaPrincipal().setVisible(true);
-                setVisible(false);
-            }
+        boolean cadastro = gerente.cadastrarCandidatos(tfdNome.getText(), tfdNumero.getText(), this.caminhoImagem, this.extensaoImagem);
+        if (!cadastro){
+            JOptionPane.showMessageDialog(null, "Os 4 candidatos foram cadastrados.");
+            new TelaPrincipal().setVisible(true);
+            setVisible(false);
         } else {
-            JOptionPane.showMessageDialog(null, "Erro ao Cadastrar Candidato.");
+            JOptionPane.showMessageDialog(null, "Candidato Cadastrado com Sucesso.");
+            tfdNome.setText("");
+            tfdNumero.setText("");
+            lImagem.setIcon(null);
+            tfdNome.requestFocus();
         }
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnFCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFCActionPerformed
+        try {
+            gerente.registrarCandidatos();
+        } catch (IOException ex) {
+            Logger.getLogger(Cadastrar.class.getName()).log(Level.SEVERE, null, ex);
+        }
         new TelaPrincipal().setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_btnFCActionPerformed
-
-    private void btnResetarCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetarCadastroActionPerformed
-
-        GerenteArquivos gerente = new GerenteArquivos();
-        if(gerente.resetarCadastro()){
-            this.qtdCandidato = 0;
-            JOptionPane.showMessageDialog(null, "Cadastro Resetado com Sucesso");
-        } else {
-            JOptionPane.showMessageDialog(null, "Falha no Reset do Cadastro");
-        }
-    }//GEN-LAST:event_btnResetarCadastroActionPerformed
 
     /**
      * @param args the command line arguments
@@ -354,7 +319,6 @@ public class Cadastrar extends javax.swing.JFrame {
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnFC;
     private javax.swing.JButton btnInserirFoto;
-    private javax.swing.JButton btnResetarCadastro;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lFoto;

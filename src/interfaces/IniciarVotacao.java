@@ -4,7 +4,6 @@
  */
 package interfaces;
 
-import arquivos.Candidato;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -49,7 +48,8 @@ public class IniciarVotacao extends javax.swing.JFrame {
         jRadioButtonMenuItem2.setSelected(true);
         jRadioButtonMenuItem2.setText("jRadioButtonMenuItem2");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Votação");
 
         button1.setLabel("Votar");
         button1.addActionListener(new java.awt.event.ActionListener() {
@@ -110,8 +110,6 @@ public class IniciarVotacao extends javax.swing.JFrame {
                 .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39))
         );
-
-        getAccessibleContext().setAccessibleName("Votação");
 
         pack();
         setLocationRelativeTo(null);
