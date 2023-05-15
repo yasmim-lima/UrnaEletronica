@@ -12,8 +12,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +29,7 @@ public class GerenteArquivos implements Arquivos {
 
     ArrayList<Candidato> candidatos = new ArrayList<>(); //Array geral com os candidatos
     ArrayList<Candidato> candidatosLidos = new ArrayList<>();
+    ArrayList<Candidato> votosComputados = new ArrayList<>();
 
     @Override
     public boolean cadastrarCandidatos(String nome, String numero, String caminhoImagem, String extensaoImagem) {
@@ -146,20 +150,48 @@ public class GerenteArquivos implements Arquivos {
 
     @Override
     public String mostrarCandidatos() {
-        return "Adagas";
+        return null;
     }
 
     @Override
     public String listarVotos() {
-        return "Voadoras";
+        
+        String nomeArquivo = "arqs"
+                + System.getProperty("file.separator")
+                + "votos.txt";
+        File arquivo = new File(nomeArquivo); //Cria um objeto arquivo
+        if (arquivo.exists()) { //Verifica se já existe o arquivo de candidatos
+            try {
+                Scanner ler = new Scanner(arquivo); //Cria objeto scanner
+                while (ler.hasNextLine()) { //Cria um loop para ler todas as linhas do arquivo Candidatos.txt
+                    String linha = ler.nextLine(); //String que recebe a linha lida
+                    String[] partes = linha.split(","); //Array de String que recebe as partes informações das linhas separadas por ,
+
+                    String numeroLido = partes[0]; //Atribui o numero lido a variavel numeroLido
+                    String nomeLido = partes[1]; //Atribui o nome lido a variavel nomeLido
+                    Candidato votoComputado = new Candidato(nomeLido, numeroLido); //recria o candidato para adicionar na Array de votosComputados
+                    votosComputados.add(votoComputado); //Adiciona o candidato a Array votosComputados    
+                }
+                ler.close();
+                
+                for (Candidato candidato : votosComputados) {
+                System.out.println("Nome: " + candidato.getNome() + " | Número: " + candidato.getNumero());
+            }
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(GerenteArquivos.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        return null;        
     }
 
-//    public static void main(String[] args) {
-//        GerenteArquivos gerente = new GerenteArquivos();
-//        gerente.cadastrarCandidatos("Gabriel", "1");
-//        gerente.cadastrarCandidatos("Yasmim", "2");
-//        gerente.cadastrarCandidatos("Alice","3");
+    public static void main(String[] args) {
+        GerenteArquivos gerente = new GerenteArquivos();
+        gerente.listarVotos();
+ //       gerente.cadastrarCandidatos("Gabriel", "1");
+ //       gerente.cadastrarCandidatos("Yasmim", "2");
+ //       gerente.cadastrarCandidatos("Alice","3");
 //        gerente.cadastrarCandidatos("Sofia", "4");
 //        gerente.cadastrarCandidatos("Fernanda", "5");
-//    }
+    }
 }
