@@ -6,28 +6,18 @@ package interfaces;
 
 import arquivos.GerenteArquivos;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+//import java.io.InputStream;
+//import java.io.OutputStream;
 import java.awt.Image;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+//import java.io.FileInputStream;
+//import java.io.FileOutputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-
-//#### Importes antigos
-//import arquivos.GerenteArquivosAntigo;
-//import java.io.BufferedReader;
-
-//import java.io.FileReader;
-//import java.io.InputStream;
-//import java.io.OutputStream;
-//import java.io.IOException;
-
 
 /**
  *

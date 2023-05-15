@@ -26,6 +26,7 @@ public class GerenteArquivos implements Arquivos {
 
     ArrayList<Candidato> candidatos = new ArrayList<>(); //Array geral com os candidatos
     ArrayList<Candidato> candidatosLidos = new ArrayList<>();
+    ArrayList<String> votos = new ArrayList<>();
 
     @Override
     public boolean cadastrarCandidatos(String nome, String numero, String caminhoImagem, String extensaoImagem) {
@@ -111,7 +112,8 @@ public class GerenteArquivos implements Arquivos {
             try {
                 String hash = hashG.generateHash(texto); //Cria uma string pra receber o valor da hash
                 FileWriter escritor = new FileWriter(nomeArquivoCandidato, true); //Cria um objeto FileWriter
-                escritor.write(texto + hash + "\n"); //Faz a escrita no arquivo
+                escritor.write(texto + hash); //Faz a escrita no arquivo
+                escritor.write(System.getProperty("line.separator"));
                 escritor.close(); //Fecha a stream do escritor
 
                 System.out.println("Candidato Registrado com Sucesso!"); //Avisa que a escrita dos dados do candidato no arquivo acabou
@@ -131,7 +133,8 @@ public class GerenteArquivos implements Arquivos {
             try {
                 String hashArqCandidatos = hashGA.generateHash(arquivo); //String que recebe a hash gerada para o arquivo de Arquivos
                 FileWriter escritor = new FileWriter(nomeArquivoArquivos, true); //Cria um objeto FileWriter
-                escritor.write("Candidatos" + "," + hashArqCandidatos + "\n"); //Faz a escrita no arquivo
+                escritor.write("Candidatos" + "," + hashArqCandidatos); //Faz a escrita no arquivo
+                escritor.write(System.getProperty("line.separator"));
                 escritor.close();//Fecha a stream do escritor
             } catch (NoSuchAlgorithmException e) {
                 System.err.println("Erro ao gerar hash: " + e.getMessage());
@@ -140,13 +143,105 @@ public class GerenteArquivos implements Arquivos {
     }
 
     @Override
-    public void registarVoto() {
+    public void cadastrarVoto(String num) {
+        String nomeCandidato = "";
+        String nomeArquivo = "arqs"
+                + System.getProperty("file.separator")
+                + "Candidatos.txt";
+        File arquivo = new File(nomeArquivo); //Cria um objeto arquivo
+        try {
+            Scanner ler = new Scanner(arquivo); //Cria objeto scanner
+            while (ler.hasNextLine()) { //Cria um loop para ler todas as linhas do arquivo Candidatos.txt
+                String linha = ler.nextLine(); //String que recebe a linha lida
+                String[] partes = linha.split(","); //Array de String que recebe as partes informações das linhas separadas por ,
 
+                String numeroLido = partes[0]; //Atribui o nome lido a variavel nomeLido
+                String nomeLido = partes[1]; //Atribui o numero lido a variavel numeroLido
+                Candidato candidatoLido = new Candidato(nomeLido, numeroLido); //recria o candidato para adicionar na Array de candidatosLidos
+                candidatosLidos.add(candidatoLido); //Adiciona o candidato a Array candidatosLidos
+            }
+            ler.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(GerenteArquivos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        for (Candidato c : candidatosLidos) {
+            int numCandidato = Integer.parseInt(c.getNumero());
+            int numInt = Integer.parseInt(num);
+            if (numInt == numCandidato) {
+                nomeCandidato = c.getNome();
+            }
+        }
+        String textoVoto = num + "," + nomeCandidato + ",";
+        votos.add(textoVoto);
+        System.out.println(textoVoto);
+        votos.stream().forEach(s -> System.out.println());
+    }
+
+    public void registrarVoto() {
+        //Bloco que faz o registro dos votos de fato
+        String nomeArqVotos = "arqs"
+                + System.getProperty("file.separator")
+                + "Votos.txt";
+        File arqVotos = new File(nomeArqVotos);
+        for (String voto : votos) {
+            HashStringGeneration hashG = new HashStringGeneration();
+            try {
+                String hash = hashG.generateHash(voto); //Gera a hash da linha
+                FileWriter Writer = new FileWriter(nomeArqVotos, true);
+                Writer.write(voto + hash);
+                Writer.write(System.getProperty("line.separator"));
+                Writer.close();
+            } catch (Exception e) {
+            }
+            votos.stream().forEach(s -> System.out.println());
+        }
+            //Bloco que criar o arquivo de Arquivos e adiciona a hash para o arquivo Candidatos.txt
+            String nomeArquivoArquivos = "arqs"
+                    + System.getProperty("file.separator")
+                    + "Arquivos.txt";
+            File fileArquivos = new File(nomeArquivoArquivos); //cria o objeto tipo File para o arquivo Arquivos.txt
+            if (fileArquivos.exists()) { //Verifica se o arquivo Arquivos.txt existe ou não
+                HashArquivoGeneration hashGA = new HashArquivoGeneration(); //Cria um objeto do Gerador de Hash para Arquivo
+                try {
+                    String hashArqVotos = hashGA.generateHash(arqVotos); //String que recebe a hash gerada para o arquivo de Arquivos
+                    FileWriter escritor = new FileWriter(nomeArquivoArquivos, true); //Cria um objeto FileWriter
+                    escritor.write("Votos" + "," + hashArqVotos); //Faz a escrita no arquivo
+                    escritor.write(System.getProperty("line.separator"));
+                    escritor.close();//Fecha a stream do escritor
+                } catch (NoSuchAlgorithmException e) {
+                    System.err.println("Erro ao gerar hash: " + e.getMessage());
+                } catch (IOException ex) {
+                    Logger.getLogger(GerenteArquivos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
     }
 
     @Override
-    public String mostrarCandidatos() {
-        return "Adagas";
+    public ArrayList<Candidato> mostrarCandidatos() {
+        String nomeArquivo = "arqs"
+                + System.getProperty("file.separator")
+                + "Candidatos.txt";
+        File arquivo = new File(nomeArquivo); //Cria um objeto arquivo
+        if (arquivo.exists()) { //Verifica se já existe o arquivo de candidatos
+            try {
+                Scanner ler = new Scanner(arquivo); //Cria objeto scanner
+                while (ler.hasNextLine()) { //Cria um loop para ler todas as linhas do arquivo Candidatos.txt
+                    String linha = ler.nextLine(); //String que recebe a linha lida
+                    String[] partes = linha.split(","); //Array de String que recebe as partes informações das linhas separadas por ,
+
+                    String numeroLido = partes[0]; //Atribui o nome lido a variavel nomeLido
+                    String nomeLido = partes[1]; //Atribui o numero lido a variavel numeroLido
+                    Candidato candidatoLido = new Candidato(nomeLido, numeroLido); //recria o candidato para adicionar na Array de candidatosLidos
+                    candidatosLidos.add(candidatoLido); //Adiciona o candidato a Array candidatosLidos
+                    System.out.println("Lendo arquivo pronto"); //Avisa que leu o arquivo
+                    candidatosLidos.stream().forEach(c -> System.out.println("Nome: " + c.getNome() + " | Número: " + c.getNumero())); //Imprime os candidadtos que estão presentes na Array candidatosLidos
+                }
+                ler.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(GerenteArquivos.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return candidatosLidos;
     }
 
     @Override
