@@ -35,4 +35,8 @@ public class Candidato {
         this.numero = numero;
     }
     
+    public String toString(){
+        return numero+","+nome;
+    }
+    
 }

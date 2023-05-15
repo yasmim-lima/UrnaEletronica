@@ -12,8 +12,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,7 +29,9 @@ public class GerenteArquivos implements Arquivos {
 
     ArrayList<Candidato> candidatos = new ArrayList<>(); //Array geral com os candidatos
     ArrayList<Candidato> candidatosLidos = new ArrayList<>();
-    ArrayList<String> votos = new ArrayList<>();
+    ArrayList<String> votos = new ArrayList<> ();
+    ArrayList<Candidato> votosComputados = new ArrayList<>();
+   
 
     @Override
     public boolean cadastrarCandidatos(String nome, String numero, String caminhoImagem, String extensaoImagem) {
@@ -195,32 +200,38 @@ public class GerenteArquivos implements Arquivos {
             }
             votos.stream().forEach(s -> System.out.println());
         }
-            //Bloco que criar o arquivo de Arquivos e adiciona a hash para o arquivo Candidatos.txt
-            String nomeArquivoArquivos = "arqs"
-                    + System.getProperty("file.separator")
-                    + "Arquivos.txt";
-            File fileArquivos = new File(nomeArquivoArquivos); //cria o objeto tipo File para o arquivo Arquivos.txt
-            if (fileArquivos.exists()) { //Verifica se o arquivo Arquivos.txt existe ou não
-                HashArquivoGeneration hashGA = new HashArquivoGeneration(); //Cria um objeto do Gerador de Hash para Arquivo
-                try {
-                    String hashArqVotos = hashGA.generateHash(arqVotos); //String que recebe a hash gerada para o arquivo de Arquivos
-                    FileWriter escritor = new FileWriter(nomeArquivoArquivos, true); //Cria um objeto FileWriter
-                    escritor.write("Votos" + "," + hashArqVotos); //Faz a escrita no arquivo
-                    escritor.write(System.getProperty("line.separator"));
-                    escritor.close();//Fecha a stream do escritor
-                } catch (NoSuchAlgorithmException e) {
-                    System.err.println("Erro ao gerar hash: " + e.getMessage());
-                } catch (IOException ex) {
-                    Logger.getLogger(GerenteArquivos.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        //Bloco que criar o arquivo de Arquivos e adiciona a hash para o arquivo Candidatos.txt
+        String nomeArquivoArquivos = "arqs"
+                + System.getProperty("file.separator")
+                + "Arquivos.txt";
+        File fileArquivos = new File(nomeArquivoArquivos); //cria o objeto tipo File para o arquivo Arquivos.txt
+        if (fileArquivos.exists()) { //Verifica se o arquivo Arquivos.txt existe ou não
+            HashArquivoGeneration hashGA = new HashArquivoGeneration(); //Cria um objeto do Gerador de Hash para Arquivo
+            try {
+                String hashArqVotos = hashGA.generateHash(arqVotos); //String que recebe a hash gerada para o arquivo de Arquivos
+                FileWriter escritor = new FileWriter(nomeArquivoArquivos, true); //Cria um objeto FileWriter
+                escritor.write("Votos" + "," + hashArqVotos); //Faz a escrita no arquivo
+                escritor.write(System.getProperty("line.separator"));
+                escritor.close();//Fecha a stream do escritor
+            } catch (NoSuchAlgorithmException e) {
+                System.err.println("Erro ao gerar hash: " + e.getMessage());
+            } catch (IOException ex) {
+                Logger.getLogger(GerenteArquivos.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
     }
 
     @Override
     public ArrayList<Candidato> mostrarCandidatos() {
+        return null;
+    }
+
+    @Override
+    public String listarVotos() {
+
         String nomeArquivo = "arqs"
                 + System.getProperty("file.separator")
-                + "Candidatos.txt";
+                + "votos.txt";
         File arquivo = new File(nomeArquivo); //Cria um objeto arquivo
         if (arquivo.exists()) { //Verifica se já existe o arquivo de candidatos
             try {
@@ -229,32 +240,25 @@ public class GerenteArquivos implements Arquivos {
                     String linha = ler.nextLine(); //String que recebe a linha lida
                     String[] partes = linha.split(","); //Array de String que recebe as partes informações das linhas separadas por ,
 
-                    String numeroLido = partes[0]; //Atribui o nome lido a variavel nomeLido
-                    String nomeLido = partes[1]; //Atribui o numero lido a variavel numeroLido
-                    Candidato candidatoLido = new Candidato(nomeLido, numeroLido); //recria o candidato para adicionar na Array de candidatosLidos
-                    candidatosLidos.add(candidatoLido); //Adiciona o candidato a Array candidatosLidos
-                    System.out.println("Lendo arquivo pronto"); //Avisa que leu o arquivo
-                    candidatosLidos.stream().forEach(c -> System.out.println("Nome: " + c.getNome() + " | Número: " + c.getNumero())); //Imprime os candidadtos que estão presentes na Array candidatosLidos
+                    String numeroLido = partes[0]; //Atribui o numero lido a variavel numeroLido
+                    String nomeLido = partes[1]; //Atribui o nome lido a variavel nomeLido
+                    Candidato votoComputado = new Candidato(nomeLido, numeroLido); //recria o candidato para adicionar na Array de votosComputados
+                    votosComputados.add(votoComputado); //Adiciona o candidato a Array votosComputados    
                 }
                 ler.close();
+
+                for (Candidato candidato : votosComputados) {
+                    System.out.println("Nome: " + candidato.getNome() + " | Número: " + candidato.getNumero());
+                }
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(GerenteArquivos.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        return candidatosLidos;
+
+        return null;
     }
 
-    @Override
-    public String listarVotos() {
-        return "Voadoras";
+    public static void main(String[] args) {
+        GerenteArquivos gerente = new GerenteArquivos();
     }
-
-//    public static void main(String[] args) {
-//        GerenteArquivos gerente = new GerenteArquivos();
-//        gerente.cadastrarCandidatos("Gabriel", "1");
-//        gerente.cadastrarCandidatos("Yasmim", "2");
-//        gerente.cadastrarCandidatos("Alice","3");
-//        gerente.cadastrarCandidatos("Sofia", "4");
-//        gerente.cadastrarCandidatos("Fernanda", "5");
-//    }
 }
